@@ -54,6 +54,8 @@ def list_services(
 ):
     agency_id = current_agency["id"]
     services = db.query(models.Service).options(joinedload(models.Service.checklists)).filter(models.Service.agency_id == agency_id).all()
+    for service in services:
+        service.assigned_clients = db.query(models.ClientService).filter(models.ClientService.service_id == service.id).count()
     return services
 
 
